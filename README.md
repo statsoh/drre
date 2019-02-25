@@ -4,7 +4,7 @@ This R package provides the proposed estimation and inference procedures discuss
 Email: statsoh@gmail.com
 
 
-# To Install drre in R
+# To install this package:
 ```
 library(devtools)
 install_github("statsoh/drre")
