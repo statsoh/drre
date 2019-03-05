@@ -7,12 +7,9 @@ Authors@R: c(
     person("Yijian (Eugene)", "Huang", email="yhuang5@emory.edu", role=c("aut"))
 URL: https://github.com/statsoh/drre
 Maintainer: Jay Soh <statsoh@gmail.com>
-Description: Recurrent events often arise in follow-up studies where a subject 
-    may experience multiple occurrences of the same event. Most regression models 
-    with recurrent events tacitly assume constant effects of covariates over time, 
-    which may not be realistic in practice. To address time-varying effects, we 
-    develop a dynamic regression model to target the mean frequency of recurrent 
-    events in Jay Soh and Dr. Yijian Huang (Biometrics). 
+Description: This R package provides useful functions for the proposed estimation 
+    and inference procedures, discussed in `Dynamic Regression with Recurrent Events' 
+    of Jay Soh and Dr. Eugene Huang (Biometrics).
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
