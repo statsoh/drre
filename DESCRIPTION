@@ -2,11 +2,20 @@ Package: drre
 Type: Package
 Title: Dynamic Regression with Recurrent Events
 Version: 0.1.0
-Author: person("Jay", "Soh", email="statsoh@gmail.com", role=c("aut", 'cre"))
+Authors@R: c(
+    person("Jay", "Soh", email="statsoh@gmail.com", role=c("aut", 'cre"),
+    person("Yijian (Eugene)", "Huang", email="yhuang5@emory.edu", role=c("aut"))
+URL: https://github.com/statsoh/drre
 Maintainer: Jay Soh <statsoh@gmail.com>
-Description: Recurrent events often arise in follow-up studies where a subject may experience multiple occurrences of the same event. Most regression models with recurrent events tacitly assume constant effects of covariates over time, which may not be realistic in practice. To address time-varying effects, we develop a dynamic regression model to target the mean frequency of recurrent events in Soh and Huang (Biometrics). 
+Description: Recurrent events often arise in follow-up studies where a subject 
+    may experience multiple occurrences of the same event. Most regression models 
+    with recurrent events tacitly assume constant effects of covariates over time, 
+    which may not be realistic in practice. To address time-varying effects, we 
+    develop a dynamic regression model to target the mean frequency of recurrent 
+    events in Jay Soh and Dr. Yijian Huang (Biometrics). 
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-
+Suggests: 
+    survival
