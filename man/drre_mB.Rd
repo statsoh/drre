@@ -19,19 +19,77 @@ drre_mB(n, M, P, MCol, u, dt, MNum, zvec, Mvec, xiN)
 
 \item{dt}{a vector of censoring times}
 
-\item{zvec}{vectorized form of [1 Z]^T matrix. (5 x N)}
+\item{MNum}{the number of observations at unique event times; if no tied events, all is 0}
+
+\item{zvec}{vectorized form of [1 Z]^T matrix.}
 
 \item{Mvec}{vectorized form of (MCOL x # unique times) ID matrix. ids for unique event times}
 
 \item{xiN}{vector of a random sample of size n which following the standard exponential distribution (mean=variance=1)}
-
-\item{NNum}{the number of observations at unique event times; if no tied events, all is 0}
 }
 \description{
-Function `drre_mB' fits the regression coefficients in the model based on the proposed nonparametric multiplier bootstrap estimation procedure in Soh and Huang (Biometrics, 2019); see related discussion in Rubin (1981), Kosorok (2008) and Huang (2014)
+Function `drre_mB' fits the regression coefficients in the model based on the proposed nonparametric multiplier bootstrap estimation procedure in Soh and Huang (Biometrics); see related discussion in Rubin (1981), Kosorok (2008) and Huang (2014)
 }
 \examples{
-drre_mB()
+# ------------------
+# Calling the bladder tumor data (Byar, 1980) from `survival' R package
+# ------------------
+require(survival)
+data("bladder")
+
+# ------------------
+# Data Step
+# ------------------
+N=length(unique(bladder1$id))
+uniq.evnts=sort(unique(bladder1[bladder1$status==1,"stop"]))
+
+temp.cen=do.call("rbind",by(bladder1,bladder1$id,tail,n=1))[,c("status","stop")]
+censoring=ifelse(temp.cen[,"status"]==1,temp.cen[,"stop"]+.1,temp.cen[,"stop"])
+
+temp.cov=bladder1[!duplicated(bladder1$id),c("treatment","number","size")]
+covar=cbind(rep(1,length(unique(bladder1$id))),
+            as.numeric(temp.cov$treatment=="pyridoxine"),
+            as.numeric(temp.cov$treatment=="thiotepa"),
+            temp.cov$number,
+            temp.cov$size
+)
+
+idMAT=matrix(0,nrow=length(unique(bladder1[bladder1$status==1,"stop"]))
+             , ncol =  max(table(bladder1[bladder1$status==1,"stop"]))
+)
+temp.cnt=1
+for(i in sort(unique(bladder1[bladder1$status==1,"stop"]))){
+  temp=sort(bladder1[bladder1$status==1 & bladder1[,"stop"]==i,"id"])
+  for (j in 1:length(temp)){
+    idMAT[temp.cnt,j]=temp[j]
+  }
+  temp.cnt=temp.cnt+1
+}
+
+# ------------------
+# The Multiplier Bootstrap
+# ------------------
+B=1000;set.seed(12345)
+xiN=matrix(rgamma(N*B,1,1),nrow=N,ncol=B)   # N x B
+m_results1=list()
+
+for (b in 1:B){
+  m_beta1=drre_mB(N,
+                  length(unique(bladder1[bladder1$status==1,"stop"])),
+                  4,
+                  max(table(bladder1[bladder1$status==1,"stop"])),
+                  uniq.evnts,
+                  censoring,
+                  as.vector(table(bladder1[bladder1$status==1,"stop"])),
+                  as.vector(t(covar)),
+                  as.vector(t(idMAT)) ,
+                  xiN[,b]
+  )
+
+  m_result1=cbind(sort(unique(bladder1[bladder1$status==1,"stop"]))
+                  ,m_beta1[[1]][-1,])
+  m_results1[[b]]=m_result1
+}
 }
 \keyword{dynamic}
 \keyword{events;}

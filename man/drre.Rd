@@ -19,17 +19,65 @@ drre(n, M, P, MCol, u, dt, MNum, zvec, Mvec)
 
 \item{dt}{a vector of censoring times}
 
-\item{zvec}{vectorized form of [1 Z]^T matrix. (5 x N)}
+\item{MNum}{the number of observations at unique event times; if no tied events, all is 0}
+
+\item{zvec}{vectorized form of [1 Z]^T matrix.}
 
 \item{Mvec}{vectorized form of (MCOL x # unique times) ID matrix. ids for unique event times}
-
-\item{NNum}{the number of observations at unique event times; if no tied events, all is 0}
 }
 \description{
-Recurrent events often arise in follow-up studies where a subject may experience multiple occurrences of the same event. Most regression models with recurrent events tacitly assume constant effects of covariates over time, which may not be realistic in practice. To address time-varying effects, we develop a dynamic regression model to target the mean frequency of recurrent events in Soh and Huang (Biometrics, 2019). Function `drre' fits the regression coefficients in the model based on the proposed estimation procedure which fully exploits observed data.
+Recurrent events often arise in follow-up studies where a subject may experience multiple occurrences of the same event. Most regression models with recurrent events tacitly assume constant effects of covariates over time, which may not be realistic in practice. To address time-varying effects, we develop a dynamic regression model to target the mean frequency of recurrent events in Soh and Huang (Biometrics). Function `drre' fits the regression coefficients in the model based on the proposed estimation procedure, which fully exploits observed data.
 }
 \examples{
-drre()
+# ------------------
+# Calling the bladder tumor data (Byar, 1980) from `survival' R package
+# ------------------
+require(survival)
+data("bladder")
+
+# ------------------
+# Data Step
+# ------------------
+N=length(unique(bladder1$id))
+uniq.evnts=sort(unique(bladder1[bladder1$status==1,"stop"]))
+
+temp.cen=do.call("rbind",by(bladder1,bladder1$id,tail,n=1))[,c("status","stop")]
+censoring=ifelse(temp.cen[,"status"]==1,temp.cen[,"stop"]+.1,temp.cen[,"stop"])
+
+temp.cov=bladder1[!duplicated(bladder1$id),c("treatment","number","size")]
+covar=cbind(rep(1,length(unique(bladder1$id))),
+            as.numeric(temp.cov$treatment=="pyridoxine"),
+            as.numeric(temp.cov$treatment=="thiotepa"),
+            temp.cov$number,
+            temp.cov$size
+)
+
+idMAT=matrix(0,nrow=length(unique(bladder1[bladder1$status==1,"stop"]))
+             , ncol =  max(table(bladder1[bladder1$status==1,"stop"]))
+)
+temp.cnt=1
+for(i in sort(unique(bladder1[bladder1$status==1,"stop"]))){
+  temp=sort(bladder1[bladder1$status==1 & bladder1[,"stop"]==i,"id"])
+  for (j in 1:length(temp)){
+    idMAT[temp.cnt,j]=temp[j]
+  }
+  temp.cnt=temp.cnt+1
+}
+
+# ------------------
+# Model Fitting
+# ------------------
+drre(N,
+     length(unique(bladder1[bladder1$status==1,"stop"])),
+     4,
+     max(table(bladder1[bladder1$status==1,"stop"])),
+     uniq.evnts,
+     censoring,
+     as.vector(table(bladder1[bladder1$status==1,"stop"])),
+     as.vector(t(covar)),
+     as.vector(t(idMAT))
+)
+
 }
 \keyword{dynamic}
 \keyword{events;}

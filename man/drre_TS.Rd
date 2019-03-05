@@ -22,7 +22,66 @@ drre_TS(t1 = t1, t2 = t2, result = estimated_effects, pwr = pwr,
 Function `drre_TS' provides a test statistic for evaluating the null hypothesis H_0: the effect of a covariate is constant over (t1, t2], which is discussed in Soh and Huang (Biometrics, 2019; Section 3.4).
 }
 \examples{
-drre_avg()
+# ------------------
+# Calling the bladder tumor data (Byar, 1980) from `survival' R package
+# ------------------
+require(survival)
+data("bladder")
+
+# ------------------
+# Data Step
+# ------------------
+N=length(unique(bladder1$id))
+uniq.evnts=sort(unique(bladder1[bladder1$status==1,"stop"]))
+
+temp.cen=do.call("rbind",by(bladder1,bladder1$id,tail,n=1))[,c("status","stop")]
+censoring=ifelse(temp.cen[,"status"]==1,temp.cen[,"stop"]+.1,temp.cen[,"stop"])
+
+temp.cov=bladder1[!duplicated(bladder1$id),c("treatment","number","size")]
+covar=cbind(rep(1,length(unique(bladder1$id))),
+            as.numeric(temp.cov$treatment=="pyridoxine"),
+            as.numeric(temp.cov$treatment=="thiotepa"),
+            temp.cov$number,
+            temp.cov$size
+)
+
+idMAT=matrix(0,nrow=length(unique(bladder1[bladder1$status==1,"stop"]))
+             , ncol =  max(table(bladder1[bladder1$status==1,"stop"]))
+)
+temp.cnt=1
+for(i in sort(unique(bladder1[bladder1$status==1,"stop"]))){
+  temp=sort(bladder1[bladder1$status==1 & bladder1[,"stop"]==i,"id"])
+  for (j in 1:length(temp)){
+    idMAT[temp.cnt,j]=temp[j]
+  }
+  temp.cnt=temp.cnt+1
+}
+
+# ------------------
+# Model Fitting
+# ------------------
+BETA1=
+     drre(N,
+     length(unique(bladder1[bladder1$status==1,"stop"])),
+     4,
+     max(table(bladder1[bladder1$status==1,"stop"])),
+     uniq.evnts,
+     censoring,
+     as.vector(table(bladder1[bladder1$status==1,"stop"])),
+     as.vector(t(covar)),
+     as.vector(t(idMAT))
+)
+trim.result=cbind(uniq.evnts,BETA1[[1]][-1,])
+
+#---------------------------
+# Test Statistic for 'Constant' Effect
+#---------------------------
+t1=5; t2=53
+pwr=1
+
+trim.result_ConstantEffect=cbind(uniq.evnts,t(t(trim.result[,-1])-drre_avg(t1,t2,trim.result)))
+drre_TS(t1,t2,trim.result_ConstantEffect,pwr=pwr,n=N)
+
 }
 \keyword{dynamic}
 \keyword{events;}
