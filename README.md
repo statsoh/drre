@@ -12,22 +12,22 @@ install_github("statsoh/drre")
 
 # drre::drre()
 Function `drre' fits time-varying regression coefficients of the proposed dynamic regression model with recurrent events. The  estimation procedure fully exploits observed data.
-###### Usage
+### Usage
 ```
 drre(n, M, P, MCol, u, dt, MNum, zvec, Mvec)
 ```
-###### Arguments
-- n         the number of subjects
-- M	the number of unique event times in the sample
-- P	the number of covariates of interest
-- MCol	the maximum number of subjects observed in the sample at an event time
-- u	a vector of ordered unique event times in the sample
-- dt	a vector of censoring times
-- MNum	the number of observations at unique event times; if no tied events, all is 0
-- zvec	vectorized form of [1 Z]^T matrix.
-- Mvec	vectorized form of (MCOL x # unique times) ID matrix. ids for unique event times
+### Arguments
+- n:     the number of subjects
+- M:     the number of unique event times in the sample
+- P:     the number of covariates of interest
+- MCol:     the maximum number of subjects observed in the sample at an event time
+- u:     a vector of ordered unique event times in the sample
+- dt:     a vector of censoring times
+- MNum:     the number of observations at unique event times; if no tied events, all is 0
+- zvec:     vectorized form of [1 Z]^T matrix.
+- Mvec:     vectorized form of (MCOL x # unique times) ID matrix. ids for unique event times
 
-###### Example
+### Example
 ```
 # ------------------
 # Calling the bladder tumor data (Byar, 1980) from `survival' R package
