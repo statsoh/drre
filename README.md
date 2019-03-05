@@ -1,4 +1,4 @@
-# drre
+# drre: The R Package
 This package provides useful R functions for the proposed estimation and inference procedures, discussed in `Dynamic Regression with Recurrent Events' of Jay Soh and Dr. Eugene Huang.
 
 Email: statsoh@gmail.com (Jay Soh)
@@ -10,7 +10,7 @@ library(devtools)
 install_github("statsoh/drre")
 ```
 
-# drre::drre()
+# 1. drre::drre()
 Function `drre' fits time-varying regression coefficients of the proposed dynamic regression model with recurrent events. The  estimation procedure fully exploits observed data.
 ### Usage
 ```
@@ -79,7 +79,7 @@ drre(N,
 )
 ```
 
-# drre::drre_mB()
+# 2. drre::drre_mB()
 Function ‘drre_mB’ fits the regression coefficients in the model based on the proposed nonparametric multiplier bootstrap estimation procedure in Soh and Huang (Biometrics); see related discussion in Rubin (1981), Kosorok (2008) and Huang (2014)
 
 ### Usage
@@ -161,7 +161,7 @@ for (b in 1:B){
 }
 ```
 
-# drre::drre_avg()
+# 3. drre::drre_avg()
 Function ‘drre_avg’ provides an average of the estimated effects of covariates coefficients discussed in Soh and Huang (Biometrics; Section 3.4); see Peng and Huang (2008) for its usage in quantile regression
 ### Usage
 ```
@@ -232,7 +232,7 @@ t1=5; t2=53
 drre_avg(t1,t2,trim.result)[-1]
 ```
 
-# drre::drre_TS()
+# 4. drre::drre_TS()
 Function ‘drre_TS’ provides a test statistic for evaluating the null hypothesis H_0: the effect of a covariate is constant over (t1, t2], which is discussed in Soh and Huang (Biometrics; Section 3.4).
 ### Usage
 ```
