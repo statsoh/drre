@@ -96,7 +96,7 @@ drre=function(n,M,P,MCol,u,dt,MNum,zvec,Mvec){
 #' @param MNum the number of observations at unique event times; if no tied events, all is 0
 #' @param zvec vectorized form of [1 Z]^T matrix.
 #' @param Mvec vectorized form of (MCOL x # unique times) ID matrix. ids for unique event times
-#' @param xiN vector of a random sample of size n which following the standard exponential distribution (mean=variance=1)
+#' @param xiN a vector of a random sample of size n from the standard exponential distribution (mean=variance=1)
 #' @keywords recurrent events; dynamic regression; mean frequency function;
 #' @export
 #' @examples
@@ -186,7 +186,7 @@ drre_mB=function(n,M,P,MCol,u,dt,MNum,zvec,Mvec,xiN){
 
 #' drre_avg: Average Effects of Covariates Based on `drre' fit
 #'
-#' Function `drre_ave' provides an average of the estimated effects of covariates coefficients discussed in Soh and Huang (Biometrics; Section 3.4); see Peng and Huang (1981) for its usage in quantile regression
+#' Function `drre_avg' provides an average of the estimated effects of covariates coefficients discussed in Soh and Huang (Biometrics; Section 3.4); see Peng and Huang (2008) for its usage in quantile regression
 #' @param t1 Lower limit of the time interval of interest
 #' @param t2 Upper limit of the time interval of interest
 #' @param result  Data-frame or matrix argument of the vector of unique event times in the sample (increasing order) and the estimated effects of covariates over the event times, i.e., the drre fit
@@ -273,12 +273,12 @@ drre_avg=function(t1=t1,t2=t2,result=estimated_effects){
 
 #' drre_TS: A Test Statistic for Evaluating H_0: the effect of a covariate is constant over (t1, t2]
 #'
-#' Function `drre_TS' provides a test statistic for evaluating the null hypothesis H_0: the effect of a covariate is constant over (t1, t2], which is discussed in Soh and Huang (Biometrics, 2019; Section 3.4).
+#' Function `drre_TS' provides a test statistic for evaluating the null hypothesis H_0: the effect of a covariate is constant over (t1, t2], which is discussed in Soh and Huang (Biometrics; Section 3.4).
 #' @param t1 Lower limit of the time interval of interest
 #' @param t2 Upper limit of the time interval of interest
 #' @param result  Data-frame or matrix argument of the vector of unique event times in the sample (increasing order) and the estimated effects of covariates over the event times, i.e., the drre fit
 #' @param pwr  The degree of a polynomial weight function
-#' @param n the number of subjects in the sample
+#' @param n The number of subjects in the sample
 #' @keywords recurrent events; dynamic regression; mean frequency function;
 #' @export
 #' @examples
