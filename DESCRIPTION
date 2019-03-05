@@ -1,12 +1,12 @@
 Package: drre
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Dynamic Regression with Recurrent Events
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: person("Jay", "Soh", email="statsoh@gmail.com", role=c("aut", 'cre"))
+Maintainer: Jay Soh <statsoh@gmail.com>
+Description: Recurrent events often arise in follow-up studies where a subject may experience multiple occurrences of the same event. Most regression models with recurrent events tacitly assume constant effects of covariates over time, which may not be realistic in practice. To address time-varying effects, we develop a dynamic regression model to target the mean frequency of recurrent events in Soh and Huang (Biometrics). 
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+
